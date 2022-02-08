@@ -1,19 +1,19 @@
-﻿@model SliderModel
+﻿@model Nop.Plugin.Widgets.MySlider.Areas.Admin.Models.MySliderModel
 
 @{
     //page title
-    ViewBag.Title = T("NopStation.AnywhereSlider.EditDetails").Text;
+    ViewBag.Title = T("Nop.MySlider.EditDetails").Text;
     //active menu item (system name)
-    Html.SetActiveMenuItemSystemName("AnywhereSlider");
+    Html.SetActiveMenuItemSystemName("MySlider");
 }
 
-<form asp-controller="AnywhereSlider" asp-action="Edit" method="post" id="anywhere-slider-form">
+<form asp-controller="MySlider" asp-action="Edit" method="post" id="anywhere-slider-form">
     <div class="content-header clearfix">
         <h1 class="pull-left">
-            @T("NopStation.AnywhereSlider.EditDetails")
+            @T("Nop.MySlider.EditDetails")
             <small>
                 <i class="fa fa-arrow-circle-left"></i>
-                <a asp-action="List">@T("NopStation.AnywhereSlider.BackToList")</a>
+                <a asp-action="List">@T("Nop.MySlider.BackToList")</a>
             </small>
         </h1>
         <div class="pull-right">

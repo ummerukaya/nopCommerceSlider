@@ -1,19 +1,19 @@
-@model SliderItemModel
+@model Nop.Plugin.Widgets.MySlider.Areas.Admin.Models.MySliderItemModel
 
 @{
     Layout = "_AdminPopupLayout";
 
     //page title
-    ViewBag.Title = T("NopStation.AnywhereSlider.SliderItems.AddNew").Text;
+    ViewBag.Title = T("Nop.MySlider.MySliderItems.AddNew").Text;
 }
 
-<form asp-controller="AnywhereSlider" asp-action="SliderItemCreatePopup"
+<form asp-controller="MySlider" asp-action="MySliderItemCreatePopup"
       asp-route-sliderId="@Context.Request.Query["sliderId"]"
       asp-route-btnId="@Context.Request.Query["btnId"]"
       asp-route-formId="@Context.Request.Query["formId"]">
     <div class="content-header clearfix">
         <h1 class="pull-left">
-            @T("NopStation.AnywhereSlider.SliderItems.AddNew")
+            @T("Nop.MySlider.MySliderItems.AddNew")
         </h1>
         <div class="pull-right">
             <button type="submit" name="save" class="btn bg-blue">
@@ -22,5 +22,5 @@
             </button>
         </div>
     </div>
-    @await Html.PartialAsync("_CreateOrUpdateSliderItem", Model)
+    @await Html.PartialAsync("_CreateOrUpdateMySliderItem", Model)
 </form>
