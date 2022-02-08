@@ -10,7 +10,7 @@ using Nop.Web.Framework.Mvc.ModelBinding;
 
 namespace Nop.Plugin.Widgets.MySlider.Areas.Admin.Models
 {
-    public record MySliderModel : BaseNopModel
+    public record MySliderModel : BaseNopEntityModel,IStoreMappingSupportedModel
     {
         public MySliderModel()
         {

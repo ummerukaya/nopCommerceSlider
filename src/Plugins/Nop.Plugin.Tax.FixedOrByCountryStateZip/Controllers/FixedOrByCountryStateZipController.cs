@@ -26,7 +26,7 @@ namespace Nop.Plugin.Tax.FixedOrByCountryStateZip.Controllers
     [AuthorizeAdmin]
     [Area(AreaNames.Admin)]
     [AutoValidateAntiforgeryToken]
-    public class FixedOrByCountryStateZipController : BasePluginController
+    public class FixedOrByCountryStateZipController : BaseNopController
     {
         #region Fields
 

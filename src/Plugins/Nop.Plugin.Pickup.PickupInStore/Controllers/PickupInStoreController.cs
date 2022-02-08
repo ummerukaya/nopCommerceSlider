@@ -25,7 +25,7 @@ namespace Nop.Plugin.Pickup.PickupInStore.Controllers
     [Area(AreaNames.Admin)]
     [AuthorizeAdmin]
     [AutoValidateAntiforgeryToken]
-    public class PickupInStoreController : BasePluginController
+    public class PickupInStoreController : BaseNopController
     {
         #region Fields
 

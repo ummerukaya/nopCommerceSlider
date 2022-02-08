@@ -21,7 +21,7 @@ namespace Nop.Plugin.DiscountRules.CustomerRoles.Controllers
     [AuthorizeAdmin]
     [Area(AreaNames.Admin)]
     [AutoValidateAntiforgeryToken]
-    public class DiscountRulesCustomerRolesController : BasePluginController
+    public class DiscountRulesCustomerRolesController : BaseNopController
     {
         #region Fields
 

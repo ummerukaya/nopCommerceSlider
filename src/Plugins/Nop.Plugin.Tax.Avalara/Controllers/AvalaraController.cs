@@ -26,7 +26,7 @@ namespace Nop.Plugin.Tax.Avalara.Controllers
     [Area(AreaNames.Admin)]
     [AuthorizeAdmin]
     [AutoValidateAntiforgeryToken]
-    public class AvalaraController : BasePluginController
+    public class AvalaraController : BaseNopController
     {
         #region Fields
 

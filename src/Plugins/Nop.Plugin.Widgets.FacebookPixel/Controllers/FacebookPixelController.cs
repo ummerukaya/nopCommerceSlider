@@ -32,7 +32,7 @@ namespace Nop.Plugin.Widgets.FacebookPixel.Controllers
     [Area(AreaNames.Admin)]
     [AuthorizeAdmin]
     [AutoValidateAntiforgeryToken]
-    public class FacebookPixelController : BasePluginController
+    public class FacebookPixelController : BaseNopController
     {
         #region Fields
 

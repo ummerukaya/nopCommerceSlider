@@ -17,7 +17,7 @@ namespace Nop.Plugin.Widgets.NivoSlider.Controllers
     [AuthorizeAdmin]
     [Area(AreaNames.Admin)]
     [AutoValidateAntiforgeryToken]
-    public class WidgetsNivoSliderController : BasePluginController
+    public class WidgetsNivoSliderController : BaseNopController
     {
         private readonly ILocalizationService _localizationService;
         private readonly INotificationService _notificationService;

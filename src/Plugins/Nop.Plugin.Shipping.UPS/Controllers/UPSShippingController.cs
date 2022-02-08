@@ -22,7 +22,7 @@ namespace Nop.Plugin.Shipping.UPS.Controllers
     [AuthorizeAdmin]
     [Area(AreaNames.Admin)]
     [AutoValidateAntiforgeryToken]
-    public class UPSShippingController : BasePluginController
+    public class UPSShippingController : BaseNopController
     {
         #region Fields
 

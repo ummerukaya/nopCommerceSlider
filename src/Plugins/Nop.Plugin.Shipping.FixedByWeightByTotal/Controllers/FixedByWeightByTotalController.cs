@@ -28,7 +28,7 @@ namespace Nop.Plugin.Shipping.FixedByWeightByTotal.Controllers
     [AuthorizeAdmin]
     [Area(AreaNames.Admin)]
     [AutoValidateAntiforgeryToken]
-    public class FixedByWeightByTotalController : BasePluginController
+    public class FixedByWeightByTotalController : BaseNopController
     {
         #region Fields
 

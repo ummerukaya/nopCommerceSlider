@@ -18,7 +18,7 @@ using Nop.Web.Framework.Mvc.Filters;
 
 namespace Nop.Plugin.ExternalAuth.Facebook.Controllers
 {
-    public class FacebookAuthenticationController : BasePluginController
+    public class FacebookAuthenticationController : BaseNopController
     {
         #region Fields
 

@@ -16,7 +16,7 @@ using Nop.Web.Framework.Mvc.Filters;
 
 namespace Nop.Plugin.Shipping.ShipStation.Controllers
 {
-    public class ShipStationController : BasePluginController
+    public class ShipStationController : BaseNopController
     {
         private readonly ILocalizationService _localizationService;
         private readonly INotificationService _notificationService;

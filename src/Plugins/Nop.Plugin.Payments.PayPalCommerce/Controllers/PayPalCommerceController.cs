@@ -23,7 +23,7 @@ namespace Nop.Plugin.Payments.PayPalCommerce.Controllers
     [AutoValidateAntiforgeryToken]
     [ValidateIpAddress]
     [AuthorizeAdmin]
-    public class PayPalCommerceController : BasePluginController
+    public class PayPalCommerceController : BaseNopController
     {
         #region Fields
 

@@ -6,7 +6,7 @@ using Nop.Core.Domain.Stores;
 
 namespace Nop.Plugin.MySlider.Domains
 {
-    public class MySlider : BaseEntity, IStoreMappingSupported
+    public class MySliders : BaseEntity, IStoreMappingSupported
     {
         public string Name { get; set; }
 

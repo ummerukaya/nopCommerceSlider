@@ -13,7 +13,7 @@
 
 <div class="content-header clearfix">
     <h1 class="pull-left">
-        @T("NopStation.AnywhereSlider.SliderList")
+        @T("Nop.MySlider.SliderList")
     </h1>
     <div class="pull-right">
         <a asp-action="Create" class="btn bg-blue">
@@ -81,8 +81,8 @@
                 <div class="panel-body">
                     @await Html.PartialAsync("Table", new DataTablesModel
                     {
-                        Name = "nopstation-slider-grid",
-                        UrlRead = new DataUrl("List", "AnywhereSlider", null),
+                        Name = "my-slider-grid",
+                        UrlRead = new DataUrl("List", "MySlider", null),
                         Length = Model.PageSize,
                         LengthMenu = Model.AvailablePageSizes,
                         SearchButtonId = "search-slider",
@@ -94,29 +94,29 @@
                         },
                         ColumnCollection = new List<ColumnProperty>
                         {
-                            new ColumnProperty(nameof(SliderModel.Name))
+                            new ColumnProperty(nameof(MySliderModel.Name))
                             {
-                                Title = T("NopStation.AnywhereSlider.Sliders.Fields.Name").Text,
+                                Title = T("Nop.MySlider.Sliders.Fields.Name").Text,
                                 Width = "180"
                             },
-                            new ColumnProperty(nameof(SliderModel.WidgetZoneStr))
+                            new ColumnProperty(nameof(MySliderModel.WidgetZoneStr))
                             {
-                                Title = T("NopStation.AnywhereSlider.Sliders.Fields.WidgetZone").Text,
+                                Title = T("Nop.MySlider.Sliders.Fields.WidgetZone").Text,
                                 Width = "180"
                             },
-                            new ColumnProperty(nameof(SliderModel.Active))
+                            new ColumnProperty(nameof(MySliderModel.Active))
                             {
-                                Title = T("NopStation.AnywhereSlider.Sliders.Fields.Active").Text,
+                                Title = T("Nop.MySlider.Sliders.Fields.Active").Text,
                                 Width = "80",
                                 ClassName = NopColumnClassDefaults.CenterAll,
                                 Render = new RenderBoolean()
                             },
-                            new ColumnProperty(nameof(SliderModel.Id))
+                            new ColumnProperty(nameof(MySliderModel.Id))
                             {
                                 Title = T("Admin.Common.Edit").Text,
                                 Width = "100",
                                 ClassName = NopColumnClassDefaults.Button,
-                                Render = new RenderButtonEdit(new DataUrl("~/Admin/AnywhereSlider/Edit/"))
+                                Render = new RenderButtonEdit(new DataUrl("~/Admin/MySlider/Edit/"))
                             }
                         }
                     })

@@ -17,7 +17,7 @@ namespace Nop.Plugin.Widgets.AccessiBe.Controllers
     [Area(AreaNames.Admin)]
     [AuthorizeAdmin]
     [AutoValidateAntiforgeryToken]
-    public class AccessiBeController : BasePluginController
+    public class AccessiBeController : BaseNopController
     {
         #region Fields
 

@@ -4,7 +4,7 @@
     Layout = "_AdminPopupLayout";
 
     //page title
-    ViewBag.Title = T("Nop.MySlider.MySliderItems.EditDetails").Text;
+    ViewBag.Title = T("Nop.MySliderItems.EditDetails").Text;
 }
 
 <form asp-controller="MySlider" asp-action="MySliderItemEditPopup"
@@ -12,7 +12,7 @@
       asp-route-formId="@Context.Request.Query["formId"]">
     <div class="content-header clearfix">
         <h1 class="pull-left">
-            @T("Nop.MySlider.MySliderItems.EditDetails")
+            @T("Nop.MySliderItems.EditDetails")
         </h1>
         <div class="pull-right">
             <button type="submit" name="save" class="btn bg-blue">
