@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Nop.Core;
+using Nop.Plugin.MySlider.Domains;
+using Nop.Plugin.Widgets.MySlider.Areas.Admin.Models;
 using Nop.Plugin.Widgets.MySlider.Services;
 using Nop.Services.Configuration;
 using Nop.Services.Helpers;
@@ -14,7 +16,7 @@ using Nop.Web.Framework.Factories;
 
 namespace Nop.Plugin.Widgets.MySlider.Areas.Admin.Factories
 {
-    public class MySliderModelFactory : IMySliderModelFactory
+    public class MySliderAdminModelFactory : IMySliderAdminModelFactory
     {
         private readonly IStoreContext _storeContext;
         private readonly IStoreMappingSupportedModelFactory _storeMappingSupportedModelFactory;
@@ -27,7 +29,7 @@ namespace Nop.Plugin.Widgets.MySlider.Areas.Admin.Factories
         private readonly IMySliderService _mysliderService;
 
 
-        public MySliderModelFactory(IStoreContext storeContext,
+        public MySliderAdminModelFactory(IStoreContext storeContext,
             IStoreMappingSupportedModelFactory storeMappingSupportedModelFactory,
             ILocalizedModelFactory localizedModelFactory,
             IBaseAdminModelFactory baseAdminModelFactory,
@@ -48,5 +50,29 @@ namespace Nop.Plugin.Widgets.MySlider.Areas.Admin.Factories
             _mysliderService = mysliderService;
         }
 
+        public Task<MySliderItemListModel> PrepareSliderItemListModelAsync(MySliderItemSearchModel searchModel)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<MySliderItemModel> PrepareSliderItemModelAsync(MySliderItemModel model, MySliders slider, MySliderItem sliderItem, bool excludeProperties = false)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<MySliderListModel> PrepareSliderListModelAsync(MySliderSearchModel slidersearchModel)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<MySliderModel> PrepareSliderModelAsync(MySliderModel model, MySliders slider, bool excludeProperties = false)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<MySliderSearchModel> PrepareSliderSearchModelAsync(MySliderSearchModel sliderSearchModel)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

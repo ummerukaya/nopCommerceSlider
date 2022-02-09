@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Nop.Plugin.Widgets.MySlider.Factories
 {
-    class MySliderFactory
+    public class MySliderFactory
     {
     }
 }

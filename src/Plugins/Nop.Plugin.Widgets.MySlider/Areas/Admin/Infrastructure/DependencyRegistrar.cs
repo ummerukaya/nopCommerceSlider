@@ -17,7 +17,7 @@ namespace Nop.Plugin.Widgets.MySlider.Areas.Admin.Infrastructure
 
         public void Register(IServiceCollection services, ITypeFinder typeFinder, AppSettings appSettings)
         {
-            services.AddScoped<IMySliderModelFactory, MySliderModelFactory>();
+            services.AddScoped<IMySliderAdminModelFactory, MySliderAdminModelFactory>();
         }
     }
 }

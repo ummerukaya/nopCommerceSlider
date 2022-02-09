@@ -25,7 +25,7 @@ namespace Nop.Plugin.Widgets.MySlider.Areas.Admin.Controllers
         private readonly ILocalizationService _localizationService;
         private readonly INotificationService _notificationService;
         private readonly IStoreMappingService _storeMappingService;
-        private readonly IMySliderModelFactory _sliderModelFactory;
+        private readonly IMySliderAdminModelFactory _sliderModelFactory;
         private readonly IPermissionService _permissionService;
         private readonly IPictureService _pictureService;
         private readonly ISettingService _settingService;
@@ -39,7 +39,7 @@ namespace Nop.Plugin.Widgets.MySlider.Areas.Admin.Controllers
            ILocalizationService localizationService,
            INotificationService notificationService,
            IStoreMappingService storeMappingService,
-           IMySliderModelFactory sliderModelFactory,
+           IMySliderAdminModelFactory sliderModelFactory,
            IPermissionService permissionService,
            IPictureService pictureService,
            ISettingService settingService,

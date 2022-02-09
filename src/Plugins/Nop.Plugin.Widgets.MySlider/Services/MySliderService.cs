@@ -55,7 +55,7 @@ namespace Nop.Plugin.Widgets.MySlider.Services
                           join sm in _storeMappingRepository.Table
                           on new { c1 = s.Id, c2 = nameof(MySliders) } equals new { c1 = sm.EntityId, c2 = sm.EntityName } into slider_sm
                           from sm in slider_sm.DefaultIfEmpty()
-                          where !s.LimitedToStores || storeId == sm.StoreId
+                            where !s.LimitedToStores || storeId == sm.StoreId
                           select s;
             }
 
