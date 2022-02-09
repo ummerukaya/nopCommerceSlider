@@ -1,6 +1,6 @@
 ﻿using Nop.Web.Framework.Models;
 
-namespace Nop.Plugin.MySlider.Areas.Admin.Models
+namespace Nop.Plugin.Widgets.MySlider.Areas.Admin.Models
 {
     public record MySliderItemSearchModel : BaseSearchModel
     {
