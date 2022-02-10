@@ -10,6 +10,7 @@ using Nop.Core.Domain.Stores;
 using Nop.Core.Events;
 using Nop.Data;
 using Nop.Plugin.MySlider.Domains;
+using Nop.Plugin.Widgets.MySlider.Infrastructure.Cache;
 
 namespace Nop.Plugin.Widgets.MySlider.Services
 {
@@ -41,26 +42,31 @@ namespace Nop.Plugin.Widgets.MySlider.Services
         //slider
         public async Task<IPagedList<MySliders>> GetAllSlidersAsync(List<int> widgetZoneIds = null, int storeId = 0, bool? active = null, int pageIndex = 0, int pageSize = int.MaxValue)
         {
-            var sliders = _mysliderRepository.Table.Where(x => !x.Deleted);
-
-            if (widgetZoneIds != null && widgetZoneIds.Any())
-                sliders = sliders.Where(x => widgetZoneIds.Contains(x.WidgetZoneId));
-
-            if (active.HasValue)
-                sliders = sliders.Where(x => x.Active == active.Value);
-
-            if (storeId > 0 && !_catalogSettings.IgnoreStoreLimitations)
+            var cacheKey = _cacheManager.PrepareKeyForDefaultCache(ModelCacheEventConsumer.MY_SLIDER_MODEL_KEY,storeId,active);
+            var  allSliders = await _cacheManager.GetAsync(cacheKey,async () =>
             {
-                sliders = from s in sliders
-                          join sm in _storeMappingRepository.Table
-                          on new { c1 = s.Id, c2 = nameof(MySliders) } equals new { c1 = sm.EntityId, c2 = sm.EntityName } into slider_sm
-                          from sm in slider_sm.DefaultIfEmpty()
-                            where !s.LimitedToStores || storeId == sm.StoreId
-                          select s;
-            }
+                var sliders = _mysliderRepository.Table.Where(x => !x.Deleted);
 
-            var query = sliders.OrderBy(x => x.DisplayOrder);
-            return await query.ToPagedListAsync(pageIndex, pageSize);
+                if (widgetZoneIds != null && widgetZoneIds.Any())
+                    sliders = sliders.Where(x => widgetZoneIds.Contains(x.WidgetZoneId));
+
+                if (active.HasValue)
+                    sliders = sliders.Where(x => x.Active == active.Value);
+
+                if (storeId > 0 && !_catalogSettings.IgnoreStoreLimitations)
+                {
+                    sliders = from s in sliders
+                              join sm in _storeMappingRepository.Table
+                              on new { c1 = s.Id, c2 = nameof(MySliders) } equals new { c1 = sm.EntityId, c2 = sm.EntityName } into slider_sm
+                              from sm in slider_sm.DefaultIfEmpty()
+                              where !s.LimitedToStores || storeId == sm.StoreId
+                              select s;
+                }
+                var query = sliders.OrderBy(x => x.DisplayOrder);
+                return await query.ToPagedListAsync(pageIndex, pageSize);
+            });
+
+            return allSliders;
         }
 
         public async Task<MySliders> GetSliderByIdAsync(int sliderId)
@@ -105,12 +111,18 @@ namespace Nop.Plugin.Widgets.MySlider.Services
         //slider items
         public async Task<IPagedList<MySliderItem>> GetSliderItemsBySliderIdAsync(int sliderId, int pageIndex = 0, int pageSize = int.MaxValue)
         {
-            var query = _mysliderItemRepository.Table;
+            var cacheKey = _cacheManager.PrepareKeyForDefaultCache(ModelCacheEventConsumer.MY_SLIDER_ITEM_MODEL_KEY, sliderId);
+            var sliderItems = await _cacheManager.GetAsync(cacheKey, async () =>
+            {
+                var query = _mysliderItemRepository.Table;
 
-            query = query.Where(sliderItem => sliderItem.SliderId == sliderId)
-                .OrderBy(sliderItem => sliderItem.DisplayOrder);
+                query = query.Where(sliderItem => sliderItem.SliderId == sliderId)
+                    .OrderBy(sliderItem => sliderItem.DisplayOrder);
 
-            return await query.ToPagedListAsync(pageIndex, pageSize);
+                return await query.ToPagedListAsync(pageIndex, pageSize);
+            });
+
+            return sliderItems;
         }
 
         public async Task<MySliderItem> GetSliderItemByIdAsync(int sliderItemId)

@@ -26,7 +26,7 @@ namespace Nop.Plugin.Widgets.MySlider.Infrastructure.Cache
         public static CacheKey MY_SLIDER_MODEL_KEY = new CacheKey("Nop.plugins.widgets.myslider.slider-{0}-{1}", MY_SLIDER_PATTERN_KEY);
         public const string MY_SLIDER_PATTERN_KEY = "Nop.plugins.widgets.myslider.slider";
 
-        public static CacheKey MY_SLIDER_ITEM_MODEL_KEY = new CacheKey("Nop.plugins.widgets.myslider.slider.item-{0}-{1}", MY_SLIDER_ITEM_PATTERN_KEY);
+        public static CacheKey MY_SLIDER_ITEM_MODEL_KEY = new CacheKey("Nop.plugins.widgets.myslider.slider.item-{0}", MY_SLIDER_ITEM_PATTERN_KEY);
         public const string MY_SLIDER_ITEM_PATTERN_KEY = "Nop.plugins.widgets.myslider.slider.item";
 
         public static CacheKey PublicComponentKey => new CacheKey("Nop.plugins.widgets.myslider.Public.Component-{0}-{1}-{2}-{3}", PublicComponenPrefixCacheKey);

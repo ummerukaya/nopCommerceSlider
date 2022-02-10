@@ -16,6 +16,7 @@ namespace Nop.Plugin.Widgets.MySlider.Areas.Admin.Models
         {
             AvailableWidgetZones = new List<SelectListItem>();
             AvailableAnimationTypes = new List<SelectListItem>();
+            SliderItemSearchModel = new MySliderItemSearchModel();
             SelectedStoreIds = new List<int>();
         }
 
@@ -82,6 +83,8 @@ namespace Nop.Plugin.Widgets.MySlider.Areas.Admin.Models
         public IList<SelectListItem> AvailableStores { get; set; }
 
         public IList<SelectListItem> AvailableWidgetZones { get; set; }
+
+        public MySliderItemSearchModel SliderItemSearchModel { get; set; }
 
         public IList<SelectListItem> AvailableAnimationTypes { get; set; }
 
