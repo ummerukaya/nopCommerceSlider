@@ -10,7 +10,7 @@ namespace Nop.Plugin.Widgets.MySlider.Areas.Admin.Factories
 {
     public interface IMySliderAdminModelFactory
     {
-        //Task<ConfigurationModel> PrepareConfigurationModelAsync();
+        Task<ConfigurationModel> PrepareConfigurationModelAsync();
 
         Task<MySliderSearchModel> PrepareSliderSearchModelAsync(MySliderSearchModel sliderSearchModel);
 

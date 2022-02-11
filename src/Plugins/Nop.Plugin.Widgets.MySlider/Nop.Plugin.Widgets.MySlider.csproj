@@ -197,7 +197,6 @@
 
   <ItemGroup>
     <Folder Include="Data\" />
-    <Folder Include="Helpers\" />
   </ItemGroup>
 
   <!-- This target execute after "Build" target -->
