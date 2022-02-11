@@ -16,16 +16,16 @@ namespace Nop.Plugin.Widgets.MySlider.Infrastructure
             if (context.AreaName == "Admin")
             {
                 viewLocations = new[] {
-                    $"/Plugins/Nop.MySlider/Areas/Admin/Views/Shared/{{0}}.cshtml",
-                    $"/Plugins/Nop.MySlider/Areas/Admin/Views/{{1}}/{{0}}.cshtml"
+                    $"/Plugins/Widgets.MySlider/Areas/Admin/Views/Shared/{{0}}.cshtml",
+                    $"/Plugins/Widgets.MySlider/Areas/Admin/Views/{{1}}/{{0}}.cshtml"
                 }.Concat(viewLocations);
             }
             else if (context.Values.TryGetValue(THEME_KEY, out string theme))
             {
 
                 viewLocations = new[] {
-                        $"/Plugins/Nop.MySlider/Themes/{theme}/Views/Shared/{{0}}.cshtml",
-                        $"/Plugins/Nop.MySlider/Themes/{theme}/Views/{{1}}/{{0}}.cshtml"
+                        $"/Plugins/Widgets.MySlider/Themes/{theme}/Views/Shared/{{0}}.cshtml",
+                        $"/Plugins/Widgets.MySlider/Themes/{theme}/Views/{{1}}/{{0}}.cshtml"
                     }.Concat(viewLocations);
             }
 

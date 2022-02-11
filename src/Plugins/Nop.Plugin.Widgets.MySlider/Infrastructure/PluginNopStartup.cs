@@ -13,11 +13,11 @@ namespace Nop.Plugin.Widgets.MySlider.Infrastructure
 {
     public class PluginNopStartup : INopStartup
     {
-        public int Order => 1;
+        public int Order => 11;
 
         public void Configure(IApplicationBuilder application)
         {
-            throw new NotImplementedException();
+            
         }
 
         public void ConfigureServices(IServiceCollection services, IConfiguration configuration)

@@ -16,6 +16,7 @@ namespace Nop.Plugin.Widgets.MySlider.Helpers
             "home_page_before_products","home_page_top","viridi_before_footer_nav","ThemeKallesHomepageProductItemsBefore",
             "ThemeKallesHomepageProductItemsAfter","valley_top_add_1","valley_top_add_2"};
 
+
         public static async Task<List<string>> GetCustomWidgetZonesAsync()
         {
             var zones = new List<string>();
@@ -49,6 +50,18 @@ namespace Nop.Plugin.Widgets.MySlider.Helpers
                 }
             }
             return list;
+        }
+
+        public static bool TryGetWidgetZoneId(string widgetZone, out int widgetZoneId)
+        {
+            widgetZoneId = -1;
+            var zones = GetCustomWidgetZoneNameValuesAsync().Result;
+            if (zones != null && zones.Any(x => x.WidgetName.Equals(widgetZone)))
+            {
+                widgetZoneId = zones.FirstOrDefault(x => x.WidgetName.Equals(widgetZone)).WidgetId;
+                return true;
+            }
+            return false;
         }
 
         public static async Task<List<WidgetZoneModel>> GetCustomWidgetZoneNameValuesAsync()

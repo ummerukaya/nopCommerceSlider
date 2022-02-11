@@ -71,31 +71,11 @@ namespace Nop.Plugin.Widgets.MySlider.Areas.Admin.Factories
             return model;
         }
 
-        public async Task<MySliderItemListModel> PrepareSliderItemListModelAsync(MySliderItemSearchModel searchModel)
-        {
-            if (searchModel == null)
-                throw new ArgumentNullException(nameof(searchModel));
 
-            //get sliders
-            var sliderItems = await _mysliderService.GetSliderItemsBySliderIdAsync(searchModel.SliderId, searchModel.Page - 1, searchModel.PageSize);
-
-            //prepare list model
-            var model = await new MySliderItemListModel().PrepareToGridAsync(searchModel, sliderItems, () =>
-            {
-                return sliderItems.SelectAwait(async sliderItem =>
-                {
-                    var slider = await _mysliderService.GetSliderByIdAsync(sliderItem.SliderId);
-                    return await PrepareSliderItemModelAsync(null, slider, sliderItem);
-                });
-            });
-
-            return model;
-        }
-
+        //Slider Item Model
         public async Task<MySliderItemModel> PrepareSliderItemModelAsync(MySliderItemModel model, MySliders slider, MySliderItem sliderItem, bool excludeProperties = false)
         {
             
-
             if (sliderItem != null)
             {
                 if (model == null)
@@ -115,6 +95,57 @@ namespace Nop.Plugin.Widgets.MySlider.Areas.Admin.Factories
             return model;
         }
 
+
+        //slider item list model
+        public async Task<MySliderItemListModel> PrepareSliderItemListModelAsync(MySliderItemSearchModel searchModel)
+        {
+            if (searchModel == null)
+                throw new ArgumentNullException(nameof(searchModel));
+
+
+            var sliderItems = await _mysliderService.GetSliderItemsBySliderIdAsync(searchModel.SliderId, searchModel.Page - 1, searchModel.PageSize);
+
+
+            var model = await new MySliderItemListModel().PrepareToGridAsync(searchModel, sliderItems, () =>
+            {
+                return sliderItems.SelectAwait(async sliderItem =>
+                {
+                    var slider = await _mysliderService.GetSliderByIdAsync(sliderItem.SliderId);
+                    return await PrepareSliderItemModelAsync(null, slider, sliderItem);
+                });
+            });
+
+            return model;
+        }
+
+
+        // slider model
+        public async Task<MySliderModel> PrepareSliderModelAsync(MySliderModel model, MySliders slider, bool excludeProperties = false)
+        {
+
+            if (slider != null)
+            {
+                if (model == null)
+                {
+                    model = slider.ToModel<MySliderModel>();
+                    model.WidgetZoneStr = MySliderHelper.GetCustomWidgetZone(slider.WidgetZoneId);
+                    model.CreatedOn = await _dateTimeHelper.ConvertToUserTimeAsync(slider.CreatedOnUtc, DateTimeKind.Utc);
+                    model.UpdatedOn = await _dateTimeHelper.ConvertToUserTimeAsync(slider.UpdatedOnUtc, DateTimeKind.Utc);
+                }
+            }
+
+            if (!excludeProperties)
+            {
+                model.AvailableWidgetZones = await MySliderHelper.GetCustomWidgetZoneSelectListAsync();
+
+                await _storeMappingSupportedModelFactory.PrepareModelStoresAsync(model, slider, excludeProperties);
+            }
+
+            return model;
+        }
+
+
+        // Slider list model
         public async Task<MySliderListModel> PrepareSliderListModelAsync(MySliderSearchModel slidersearchModel)
         {
             if (slidersearchModel == null)
@@ -128,11 +159,11 @@ namespace Nop.Plugin.Widgets.MySlider.Areas.Admin.Factories
             else if (slidersearchModel.SearchActiveId == 2)
                 active = false;
 
-            //get carousels
+            
             var sliders = await _mysliderService.GetAllSlidersAsync(widgetZoneIds, slidersearchModel.SearchStoreId,
                 active, slidersearchModel.Page - 1, slidersearchModel.PageSize);
 
-            //prepare list model
+            
             var model = await new MySliderListModel().PrepareToGridAsync(slidersearchModel, sliders, () =>
             {
                 return sliders.SelectAwait(async slider =>
@@ -144,32 +175,7 @@ namespace Nop.Plugin.Widgets.MySlider.Areas.Admin.Factories
             return model;
         }
 
-        public async Task<MySliderModel> PrepareSliderModelAsync(MySliderModel model, MySliders slider, bool excludeProperties = false)
-        {
-
-            if (slider != null)
-            {
-                if (model == null)
-                {
-                    model = slider.ToModel<MySliderModel>();
-                    model.WidgetZoneStr = MySliderHelper.GetCustomWidgetZone(slider.WidgetZoneId);
-                    model.CreatedOn = await _dateTimeHelper.ConvertToUserTimeAsync(slider.CreatedOnUtc, DateTimeKind.Utc);
-                    model.UpdatedOn = await _dateTimeHelper.ConvertToUserTimeAsync(slider.UpdatedOnUtc, DateTimeKind.Utc);
-
-                }
-            }
-
-            if (!excludeProperties)
-            {
-                model.AvailableWidgetZones = await MySliderHelper.GetCustomWidgetZoneSelectListAsync();
-                model.AvailableAnimationTypes = MySliderHelper.GetSliderAnimationTypesSelectList();
-
-                await _storeMappingSupportedModelFactory.PrepareModelStoresAsync(model, slider, excludeProperties);
-            }
-
-            return model;
-        }
-
+        // slider search model
         public async Task<MySliderSearchModel> PrepareSliderSearchModelAsync(MySliderSearchModel sliderSearchModel)
         {
             if (sliderSearchModel == null)
@@ -182,6 +188,8 @@ namespace Nop.Plugin.Widgets.MySlider.Areas.Admin.Factories
 
             return sliderSearchModel;
         }
+
+
 
         private async Task PrepareActiveOptionsAsync(IList<SelectListItem> items, bool withSpecialDefaultItem = true)
         {
