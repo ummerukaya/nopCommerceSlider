@@ -1,0 +1,23 @@
+﻿@using Nop.Core
+@using Nop.Services.Helpers
+@using Nop.Web.Framework.Themes
+@inject IWorkContext workContext
+@inject IThemeContext themeContext
+@inject IUserAgentHelper userAgentHelper
+@{
+    var supportRtl = (await workContext.GetWorkingLanguageAsync()).Rtl;
+    var themeName = await themeContext.GetWorkingThemeNameAsync();
+
+    if (supportRtl)
+    {
+        Html.AddCssFileParts($"~/Plugins/Widgets.MySlider/Themes/{await themeContext.GetWorkingThemeNameAsync()}/Content/css/anywhere-slider.rtl.css");
+    }
+    else
+    {
+        Html.AddCssFileParts($"~/Plugins/Widgets.MySlider/Themes/{await themeContext.GetWorkingThemeNameAsync()}/Content/css/anywhere-slider.css");
+    }
+}
+
+@*@{
+    Html.AddCssFileParts("~/Plugins/NopStation.AnywhereSlider/Themes/NopKalles/Content/css/anywhere-slider.css");
+}*@

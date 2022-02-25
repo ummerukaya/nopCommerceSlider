@@ -6,10 +6,12 @@ using System.Threading.Tasks;
 using Nop.Core;
 using Nop.Core.Caching;
 using Nop.Core.Domain.Catalog;
+using Nop.Core.Domain.Customers;
 using Nop.Core.Domain.Stores;
 using Nop.Core.Events;
 using Nop.Data;
 using Nop.Plugin.MySlider.Domains;
+using Nop.Plugin.Widgets.MySlider.Domains;
 using Nop.Plugin.Widgets.MySlider.Infrastructure.Cache;
 
 namespace Nop.Plugin.Widgets.MySlider.Services
@@ -20,15 +22,19 @@ namespace Nop.Plugin.Widgets.MySlider.Services
         private readonly IRepository<MySliderItem> _mysliderItemRepository;
         private readonly IRepository<StoreMapping> _storeMappingRepository;
         private readonly IRepository<MySliders> _mysliderRepository;
+        private readonly IRepository<MySlidersCustomerRole> _mysliderCustomerRepository;
         private readonly CatalogSettings _catalogSettings;
         private readonly IEventPublisher _eventPublisher;
+        private readonly IRepository<CustomerCustomerRoleMapping> _customerRepository;
 
         public MySliderService(IRepository<MySliders> mysliderRepository,
             IRepository<StoreMapping> storeMappingRepository,
             IRepository<MySliderItem> mysliderItemRepository,
+            IRepository<MySlidersCustomerRole> mysliderCustomerRepository,
             IStaticCacheManager cacheManager,
             CatalogSettings catalogSettings,
-            IEventPublisher eventPublisher)
+            IEventPublisher eventPublisher,
+            IRepository<CustomerCustomerRoleMapping> customerRepository)
         {
             _mysliderRepository = mysliderRepository;
             _storeMappingRepository = storeMappingRepository;
@@ -36,19 +42,34 @@ namespace Nop.Plugin.Widgets.MySlider.Services
             _catalogSettings = catalogSettings;
             _eventPublisher = eventPublisher;
             _cacheManager = cacheManager;
+            _customerRepository = customerRepository;
+            _mysliderCustomerRepository = mysliderCustomerRepository;
         }
 
 
         //slider
-        public async Task<IPagedList<MySliders>> GetAllSlidersAsync(List<int> widgetZoneIds = null, int storeId = 0, bool? active = null, int pageIndex = 0, int pageSize = int.MaxValue)
+        public async Task<IPagedList<MySliders>> GetAllSlidersAsync(List<int> widgetZoneIds = null, List<int> catalogPageIds = null,
+           List<int> customerRoleIds = null, int storeId = 0, bool? active = null, int pageIndex = 0, int pageSize = int.MaxValue)
         {
-            var cacheKey = _cacheManager.PrepareKeyForDefaultCache(ModelCacheEventConsumer.MY_SLIDER_MODEL_KEY,storeId,active);
+            var cacheKey = _cacheManager.PrepareKeyForDefaultCache(ModelCacheEventConsumer.MY_SLIDER_MODEL_KEY,widgetZoneIds,catalogPageIds,storeId,active);
             var  allSliders = await _cacheManager.GetAsync(cacheKey,async () =>
             {
                 var sliders = _mysliderRepository.Table.Where(x => !x.Deleted);
 
                 if (widgetZoneIds != null && widgetZoneIds.Any())
                     sliders = sliders.Where(x => widgetZoneIds.Contains(x.WidgetZoneId));
+
+                if (catalogPageIds != null && catalogPageIds.Any())
+                    sliders = sliders.Where(x => catalogPageIds.Contains(x.CatalogPageId));
+
+                if (customerRoleIds != null && !customerRoleIds.Contains(0) && customerRoleIds.Any())
+                {
+                    var sliderId = from msc in _mysliderCustomerRepository.Table
+                                   where customerRoleIds.Contains(msc.CustomerRoleId)
+                                   select msc.MySlidersId;
+
+                    sliders = sliders.Where(x => sliderId.Contains(x.Id));
+                }
 
                 if (active.HasValue)
                     sliders = sliders.Where(x => x.Active == active.Value);
@@ -116,7 +137,7 @@ namespace Nop.Plugin.Widgets.MySlider.Services
             {
                 var query = _mysliderItemRepository.Table;
 
-                query = query.Where(sliderItem => sliderItem.SliderId == sliderId)
+                query = query.Where(sliderItem => sliderItem.MySlidersId == sliderId)
                     .OrderBy(sliderItem => sliderItem.DisplayOrder);
 
                 return await query.ToPagedListAsync(pageIndex, pageSize);
@@ -162,5 +183,20 @@ namespace Nop.Plugin.Widgets.MySlider.Services
 
             await _eventPublisher.EntityDeletedAsync(sliderItem);
         }
+
+        //public async Task<MySliders> GetSliderByCurrentCustomerRoleIdAsync(Customer currentCustomer, List<int> customerRoleIds)
+        //{
+        //    var customerId = currentCustomer.Id;
+        //    var customer = _customerRepository.Table.Where(x => x.CustomerId == customerId);
+
+        //    if (customerRoleIds != null && customerRoleIds.Any())
+        //    {
+        //        customer = from c in customer
+        //                   where customerRoleIds.Contains(c.CustomerRoleId)
+        //                   select c;
+        //    }
+
+        //    return new MySliders();
+        //}
     }
 }

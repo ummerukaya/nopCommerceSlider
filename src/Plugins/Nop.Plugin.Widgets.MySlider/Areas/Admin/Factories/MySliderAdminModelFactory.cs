@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Nop.Core;
 using Nop.Plugin.MySlider.Domains;
 using Nop.Plugin.Widgets.MySlider.Areas.Admin.Models;
+using Nop.Plugin.Widgets.MySlider.Domains;
 using Nop.Plugin.Widgets.MySlider.Helpers;
 using Nop.Plugin.Widgets.MySlider.Services;
 using Nop.Services.Configuration;
@@ -30,18 +31,21 @@ namespace Nop.Plugin.Widgets.MySlider.Areas.Admin.Factories
         private readonly IPictureService _pictureService;
         private readonly ISettingService _settingService;
         private readonly IDateTimeHelper _dateTimeHelper;
+        private readonly IMySliderCustomerService _mysliderCustomerService;
         private readonly IMySliderService _mysliderService;
-
+        private readonly IAclSupportedModelFactory _aclSupportedModelFactory;
 
         public MySliderAdminModelFactory(IStoreContext storeContext,
             IStoreMappingSupportedModelFactory storeMappingSupportedModelFactory,
             ILocalizedModelFactory localizedModelFactory,
             IBaseAdminModelFactory baseAdminModelFactory,
             ILocalizationService localizationService,
+            IMySliderCustomerService mysliderCustomerService,
             IPictureService pictureService,
             ISettingService settingService,
             IDateTimeHelper dateTimeHelper,
-            IMySliderService mysliderService)
+            IMySliderService mysliderService,
+            IAclSupportedModelFactory aclSupportedModelFactory)
         {
             _storeContext = storeContext;
             _storeMappingSupportedModelFactory = storeMappingSupportedModelFactory;
@@ -52,6 +56,8 @@ namespace Nop.Plugin.Widgets.MySlider.Areas.Admin.Factories
             _settingService = settingService;
             _dateTimeHelper = dateTimeHelper;
             _mysliderService = mysliderService;
+            _aclSupportedModelFactory = aclSupportedModelFactory;
+            _mysliderCustomerService = mysliderCustomerService;
         }
 
         public async Task<ConfigurationModel> PrepareConfigurationModelAsync()
@@ -59,14 +65,21 @@ namespace Nop.Plugin.Widgets.MySlider.Areas.Admin.Factories
             var storeId = await _storeContext.GetActiveStoreScopeConfigurationAsync();
             var sliderSettings = await _settingService.LoadSettingAsync<MySliderSettings>(storeId);
 
+            var availableCustomerRoles = new List<SelectListItem>();
+            await PrepareCustomCustomerRolesAsync(availableCustomerRoles, true);
+
             var model = sliderSettings.ToSettingsModel<ConfigurationModel>();
+           
 
             model.ActiveStoreScopeConfiguration = storeId;
-
+            model.AvailableCustomerRoles = availableCustomerRoles;
+            model.SelectedCustomerRoleIds = MySliderHelper.GetGlobalCustomerRoleIds(sliderSettings.SelectedCustomerRoleIds);
+            
             if (storeId <= 0)
                 return model;
 
             model.EnableSlider_OverrideForStore = await _settingService.SettingExistsAsync(sliderSettings, x => x.EnableSlider, storeId);
+            model.SelectedCustomerRoleIds_OverrideForStore = await _settingService.SettingExistsAsync(sliderSettings, x => x.SelectedCustomerRoleIds, storeId);
 
             return model;
         }
@@ -90,7 +103,7 @@ namespace Nop.Plugin.Widgets.MySlider.Areas.Admin.Factories
 
             }
 
-            model.SliderId = slider.Id;
+            model.MySlidersId = slider.Id;
 
             return model;
         }
@@ -110,7 +123,7 @@ namespace Nop.Plugin.Widgets.MySlider.Areas.Admin.Factories
             {
                 return sliderItems.SelectAwait(async sliderItem =>
                 {
-                    var slider = await _mysliderService.GetSliderByIdAsync(sliderItem.SliderId);
+                    var slider = await _mysliderService.GetSliderByIdAsync(sliderItem.MySlidersId);
                     return await PrepareSliderItemModelAsync(null, slider, sliderItem);
                 });
             });
@@ -128,18 +141,42 @@ namespace Nop.Plugin.Widgets.MySlider.Areas.Admin.Factories
                 if (model == null)
                 {
                     model = slider.ToModel<MySliderModel>();
+                    
+                    model.CatalogPageStr = MySliderHelper.GetCustomCatalogPage(slider.CatalogPageId);
                     model.WidgetZoneStr = MySliderHelper.GetCustomWidgetZone(slider.WidgetZoneId);
+                    model.SelectedCustomerRoleIds = _mysliderCustomerService.GetCustomerRoleBySliderId(slider.Id);
                     model.CreatedOn = await _dateTimeHelper.ConvertToUserTimeAsync(slider.CreatedOnUtc, DateTimeKind.Utc);
                     model.UpdatedOn = await _dateTimeHelper.ConvertToUserTimeAsync(slider.UpdatedOnUtc, DateTimeKind.Utc);
+                    
+                    if (slider.CatalogPageId == 1)
+                    {
+                        model.ProductWidgetZoneId = slider.WidgetZoneId;
+                    }
+                    else if (slider.CatalogPageId == 2)
+                    {
+                        model.CategoryWidgetZoneId = slider.WidgetZoneId;
+                    }
+                    else
+                    {
+                        model.ManufactureWidgetZoneId = slider.WidgetZoneId;
+                    }
                 }
             }
 
             if (!excludeProperties)
             {
-                model.AvailableWidgetZones = await MySliderHelper.GetCustomWidgetZoneSelectListAsync();
-
+                await PrepareCustomCustomerRolesAsync(model.AvailableCustomerRoles, true);
+                //model.SelectedCustomerRoleIds = _mysliderCustomerService.GetCustomerRoleBySliderId(slider.Id);
+                
+                model.AvailableCatalogPages = await MySliderHelper.GetCustomCatalogPageSelectListAsync();
+               // model.AvailableCustomerRoles = await MySliderHelper.GetCustomCustomerRoleSelectListAsync();
+               // model.AvailableWidgetZones = await MySliderHelper.GetCustomWidgetZoneSelectListAsync(model.CatalogPageId);
+                model.AvailableProductWidgetZones =  MySliderHelper.GetCustomWidgetZoneSelectList(1);
+                model.AvailableCategoryWidgetZones =  MySliderHelper.GetCustomWidgetZoneSelectList(2);
+                model.AvailableManufactureWidgetZones =  MySliderHelper.GetCustomWidgetZoneSelectList(3);
                 await _storeMappingSupportedModelFactory.PrepareModelStoresAsync(model, slider, excludeProperties);
             }
+           
 
             return model;
         }
@@ -151,7 +188,11 @@ namespace Nop.Plugin.Widgets.MySlider.Areas.Admin.Factories
             if (slidersearchModel == null)
                 throw new ArgumentNullException(nameof(slidersearchModel));
 
-            var widgetZoneIds = slidersearchModel.SearchWidgetZones?.Contains(0) ?? true ? null : slidersearchModel.SearchWidgetZones.ToList();
+            var catalogPageIds = slidersearchModel.SearchCatalogPages?.Contains(0) ?? true ?
+              null : slidersearchModel.SearchCatalogPages.ToList();
+
+            var widgetZoneIds = slidersearchModel.SearchWidgetZones?.Contains(0) ?? true ?
+                null : slidersearchModel.SearchWidgetZones.ToList();
 
             bool? active = null;
             if (slidersearchModel.SearchActiveId == 1)
@@ -160,7 +201,7 @@ namespace Nop.Plugin.Widgets.MySlider.Areas.Admin.Factories
                 active = false;
 
             
-            var sliders = await _mysliderService.GetAllSlidersAsync(widgetZoneIds, slidersearchModel.SearchStoreId,
+            var sliders = await _mysliderService.GetAllSlidersAsync(widgetZoneIds, catalogPageIds,null,slidersearchModel.SearchStoreId,
                 active, slidersearchModel.Page - 1, slidersearchModel.PageSize);
 
             
@@ -181,6 +222,8 @@ namespace Nop.Plugin.Widgets.MySlider.Areas.Admin.Factories
             if (sliderSearchModel == null)
                 throw new ArgumentNullException(nameof(sliderSearchModel));
 
+            
+            await PrepareCustomCatalogPagesAsync(sliderSearchModel.AvailableCatalogPages, true);
             await PrepareCustomWidgetZonesAsync(sliderSearchModel.AvailableWidgetZones, true);
             await PrepareActiveOptionsAsync(sliderSearchModel.AvailableActiveOptions, true);
 
@@ -222,9 +265,53 @@ namespace Nop.Plugin.Widgets.MySlider.Areas.Admin.Factories
             if (items == null)
                 throw new ArgumentNullException(nameof(items));
 
-            var availableWidgetZones = await MySliderHelper.GetCustomWidgetZoneSelectListAsync();
+            var availableWidgetZones = MySliderHelper.GetCustomWidgetZoneSelectList(0);
 
             foreach (var zone in availableWidgetZones)
+            {
+                items.Add(zone);
+            }
+
+            if (withSpecialDefaultItem)
+            {
+                items.Insert(0, new SelectListItem()
+                {
+                    Text = await _localizationService.GetResourceAsync("Admin.Common.All"),
+                    Value = "0"
+                });
+            }
+        }
+
+        private async Task PrepareCustomCustomerRolesAsync(IList<SelectListItem> items, bool withSpecialDefaultItem = true)
+        {
+            if (items == null)
+                throw new ArgumentNullException(nameof(items));
+
+            var availableCustomerRoles = await MySliderHelper.GetCustomCustomerRoleSelectListAsync();
+
+            foreach (var zone in availableCustomerRoles)
+            {
+                items.Add(zone);
+            }
+
+            if (withSpecialDefaultItem)
+            {
+                items.Insert(0, new SelectListItem()
+                {
+                    Text = await _localizationService.GetResourceAsync("Admin.Common.All"),
+                    Value = "0"
+                });
+            }
+        }
+
+        private async Task PrepareCustomCatalogPagesAsync(IList<SelectListItem> items, bool withSpecialDefaultItem = true)
+        {
+            if (items == null)
+                throw new ArgumentNullException(nameof(items));
+
+            var availableCatalogPages = await MySliderHelper.GetCustomCatalogPageSelectListAsync();
+
+            foreach (var zone in availableCatalogPages)
             {
                 items.Add(zone);
             }

@@ -56,13 +56,14 @@ namespace Nop.Plugin.Widgets.MySlider.Factories
                 AnimateIn = slider.AnimateIn,
                 Loop = slider.Loop,
                 Margin = slider.Margin,
+                OverrideGlobalSettings = slider.OverrideGlobalSettings,
                 AutoPlay = slider.AutoPlay,
                 AutoPlayTimeout = slider.AutoPlayTimeout,
                 RTL = (await _workContext.GetWorkingLanguageAsync()).Rtl
             };
 
-            if (slider.WidgetZoneId != 5 && slider.WidgetZoneId != 7 && slider.WidgetZoneId != 8)
-                sliderModel.BackGroundPictureUrl = await _pictureService.GetPictureUrlAsync(slider.BackGroundPictureId);
+            //if (slider.WidgetZoneId != 5 && slider.WidgetZoneId != 7 && slider.WidgetZoneId != 8)
+            //    sliderModel.BackGroundPictureUrl = await _pictureService.GetPictureUrlAsync(slider.BackGroundPictureId);
 
             var sliderItems = await _sliderService.GetSliderItemsBySliderIdAsync(slider.Id);
             foreach (var si in sliderItems)

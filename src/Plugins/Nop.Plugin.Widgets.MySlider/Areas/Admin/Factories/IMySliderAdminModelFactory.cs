@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Nop.Plugin.MySlider.Domains;
 using Nop.Plugin.Widgets.MySlider.Areas.Admin.Models;
+using Nop.Plugin.Widgets.MySlider.Domains;
 
 namespace Nop.Plugin.Widgets.MySlider.Areas.Admin.Factories
 {
@@ -16,7 +17,7 @@ namespace Nop.Plugin.Widgets.MySlider.Areas.Admin.Factories
 
         Task<MySliderListModel> PrepareSliderListModelAsync(MySliderSearchModel slidersearchModel);
 
-        Task<MySliderModel> PrepareSliderModelAsync(MySliderModel model, MySliders slider, bool excludeProperties = false);
+        Task<MySliderModel> PrepareSliderModelAsync(MySliderModel model, MySliders slider,bool excludeProperties = false);
 
         Task<MySliderItemListModel> PrepareSliderItemListModelAsync(MySliderItemSearchModel searchModel);
 

@@ -28,6 +28,8 @@ namespace Nop.Plugin.Widgets.MySlider.Components
         private readonly IPictureService _pictureService;
         private readonly IWebHelper _webHelper;
         private readonly IMySliderService _sliderService;
+        private readonly IMySliderCustomerService _sliderCustomerService;
+        private readonly IWorkContext _workContext;
 
         public MySliderViewComponent(IStoreContext storeContext,
             IStaticCacheManager staticCacheManager,
@@ -35,8 +37,10 @@ namespace Nop.Plugin.Widgets.MySlider.Components
             IPictureService pictureService,
             IMySliderModelFactory sliderModelFactory,
             IMySliderService sliderService,
+            IMySliderCustomerService sliderCustomerService,
             MySliderSettings sliderSettings,
-            IWebHelper webHelper)
+            IWebHelper webHelper,
+            IWorkContext workContext)
         {
             _storeContext = storeContext;
             _staticCacheManager = staticCacheManager;
@@ -46,30 +50,52 @@ namespace Nop.Plugin.Widgets.MySlider.Components
             _sliderModelFactory = sliderModelFactory;
             _webHelper = webHelper;
             _sliderSettings = sliderSettings;
+            _workContext = workContext;
+            _sliderCustomerService = sliderCustomerService;
         }
 
-        public async Task<IViewComponentResult> InvokeAsync(string widgetZone, object additionalData)
+        public async Task<IViewComponentResult> InvokeAsync(string widgetZone,object additionalData)
         {
             if (_sliderSettings.EnableSlider)
             {
                 if (!MySliderHelper.TryGetWidgetZoneId(widgetZone, out int widgetZoneId))
                     return Content("");
 
-              
+                var currentCustomer = await _workContext.GetCurrentCustomerAsync();
+                var currentCustomerRoleIds = _sliderCustomerService.GetCurrentCustomerRoleIds(currentCustomer.Id);
+
+                
+                var customerRoleIds = MySliderHelper.GetGlobalCustomerRoleIds(_sliderSettings.SelectedCustomerRoleIds);
+
+                //if (!MySliderHelper.ValidateCustomerByRoleIds(customerRoleIds, currentCustomerRoleIds))
+                //    return Content("");
+
                 IList<SliderModel> sliderModels = new List<SliderModel>();
                 var cacheKey = _staticCacheManager.PrepareKeyForDefaultCache(ModelCacheEventConsumer.PublicComponentKey,
-                                                                          widgetZone,
+                                                                          widgetZone, 
                                                                           (await _storeContext.GetCurrentStoreAsync()).Id);
 
                 sliderModels = await _staticCacheManager.GetAsync(cacheKey, async () =>
                 {
-                    var sliders = (await _sliderService.GetAllSlidersAsync(new List<int> { widgetZoneId }, 
+                    var sliders = (await _sliderService.GetAllSlidersAsync(new List<int> { widgetZoneId },
                         storeId: (await _storeContext.GetCurrentStoreAsync()).Id,
                         active: true)).ToList();
 
                     var model = sliders.Count() > 0 ? await _sliderModelFactory.PrepareSliderListModelAsync(sliders) : new List<Models.SliderModel>();
+
                     return model;
                 });
+
+                for (int i=0;i<sliderModels.Count();i++)
+                {
+                    if (sliderModels[i].OverrideGlobalSettings)
+                    {
+                        customerRoleIds = _sliderCustomerService.GetCustomerRoleBySliderId(sliderModels[i].Id);
+                    }
+
+                    if (!MySliderHelper.ValidateCustomerByRoleIds(customerRoleIds, currentCustomerRoleIds))
+                        sliderModels[i] = null;
+                }
 
                 return View(sliderModels);
             }

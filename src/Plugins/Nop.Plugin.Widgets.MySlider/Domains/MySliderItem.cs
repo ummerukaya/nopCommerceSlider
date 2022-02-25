@@ -4,6 +4,8 @@ namespace Nop.Plugin.MySlider.Domains
 {
     public class MySliderItem : BaseEntity
     {
+        public int MySlidersId { get; set; }
+
         public string Title { get; set; }
 
         public string ShortDescription { get; set; }
@@ -18,7 +20,6 @@ namespace Nop.Plugin.MySlider.Domains
 
         public string ShopNowLink { get; set; }
 
-        public int SliderId { get; set; }
 
         public int DisplayOrder { get; set; }
     }

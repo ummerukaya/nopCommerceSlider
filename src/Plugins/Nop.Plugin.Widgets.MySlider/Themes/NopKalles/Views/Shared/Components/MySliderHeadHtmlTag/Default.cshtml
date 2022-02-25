@@ -1,0 +1,17 @@
+﻿@inject IWorkContext workContext
+@inject IThemeContext themeContext
+@inject IUserAgentHelper userAgentHelper
+@{
+    var supportRtl = (await workContext.GetWorkingLanguageAsync()).Rtl;
+    var themeName = await themeContext.GetWorkingThemeNameAsync();
+
+    if (supportRtl)
+    {
+        Html.AddCssFileParts($"~/Plugins/Widgets.MySlider/Themes/{themeName}/Content/css/anywhere-slider.rtl.css");
+    }
+    else
+    {
+        Html.AddCssFileParts($"~/Plugins/Widgets.MySlider/Themes/{themeName}/Content/css/anywhere-slider.css");
+    }
+}
+

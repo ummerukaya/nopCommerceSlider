@@ -17,6 +17,8 @@ namespace Nop.Plugin.Widgets.MySlider.Models
         public IList<SliderItemModel> Items { get; set; }
 
         public int WidgetZoneId { get; set; }
+        public int CatalogPageId { get; set; }
+        public bool OverrideGlobalSettings { get; set; }
 
         public bool Nav { get; set; }
 
@@ -32,7 +34,6 @@ namespace Nop.Plugin.Widgets.MySlider.Models
 
         public int LazyLoadEager { get; set; }
 
-        public bool Video { get; set; }
 
         public bool Loop { get; set; }
 

@@ -1,26 +1,46 @@
 ﻿@model Nop.Plugin.Widgets.MySlider.Areas.Admin.Models.MySliderModel
 
-    <script>
+<script>
     $(document).ready(function() {
-        $("#@Html.IdFor(model => model.WidgetZoneId)").change(toggleBackgroundImagePanel);
+        @*$("#@Html.IdFor(model => model.WidgetZoneId)").change(toggleBackgroundImagePanel);*@
+        $("#@Html.IdFor(model => model.CatalogPageId)").change(toggleWidgetZones);
+        @*$("#@Html.IdFor(model => model.WidgetZoneId)").change(toggleBackgroundImagePanel);*@
         $("#@Html.IdFor(model => model.AutoPlay)").change(toggleAutoPlay);
         $("#@Html.IdFor(model => model.LazyLoad)").click(toggleLazyLoad);
         $("#@Html.IdFor(model => model.Nav)").click(toggleNav);
 
+        toggleWidgetZones();
         toggleBackgroundImagePanel();
         toggleAutoPlay();
         toggleLazyLoad();
         toggleNav();
     });
 
-    function toggleBackgroundImagePanel() {
-        if (($('#@Html.IdFor(model => model.WidgetZoneId)').val() != 5)
-            && ($('#@Html.IdFor(model => model.WidgetZoneId)').val() != 7)
-            && ($('#@Html.IdFor(model => model.WidgetZoneId)').val() != 8)) {
-            $('#pnlBackGroundPicture').show();
-        } else {
-            $('#pnlBackGroundPicture').hide();
+    function toggleWidgetZones() {
+        if ($('#@Html.IdFor(model => model.CatalogPageId)').val() == 1) {
+            $('#productWidgetId').show();
+            $('#categoryWidgetId').hide();
+            $('#manufactureWidgetId').hide();
+        } else if ($('#@Html.IdFor(model => model.CatalogPageId)').val() == 2) {
+            $('#productWidgetId').hide();
+            $('#categoryWidgetId').show();
+            $('#manufactureWidgetId').hide();
+        }else if ($('#@Html.IdFor(model => model.CatalogPageId)').val() == 3) {
+            $('#productWidgetId').hide();
+            $('#categoryWidgetId').hide();
+            $('#manufactureWidgetId').show();
         }
+        @* $("#@Html.IdFor(model => model.WidgetZoneId)").change(toggleBackgroundImagecard);*@
+    }
+
+    function toggleBackgroundImagecard() {
+        @*if (($('#@Html.IdFor(model => model.WidgetZoneId)').val() != 5)
+            && ($('#@Html.IdFor(model => model.WidgetZoneId)').val() != 7)
+            && ($('#@Html.IdFor(model => model.WidgetZoneId)').val() != 8)) {*@
+          /*  $('#pnlBackGroundPicture').show();*/
+        //} else {
+        //    $('#pnlBackGroundPicture').hide();
+        //}
     }
 
     function toggleAutoPlay() {
@@ -46,10 +66,23 @@
             $('#pnlNav').hide();
         }
     }
-    </script>
+</script>
 
-<div class="panel-body">
-    <div>
+<div class="card-body">
+    @*@(await Html.LocalizedEditorAsync<SliderModel, SliderLocalizedModel>("slider-info-localized",
+        @<div>
+            <div class="form-group">
+                <div class="col-md-3">
+                    <nop-label asp-for="@Model.Locales[item].Name" />
+                </div>
+                <div class="col-md-9">
+                    <nop-editor asp-for="@Model.Locales[item].Name" />
+                    <span asp-validation-for="@Model.Locales[item].Name"></span>
+                </div>
+            </div>
+            <input type="hidden" asp-for="@Model.Locales[item].LanguageId" />
+        </div>
+                        ,@*@<div>
         <div class="form-group">
             <div class="col-md-3">
                 <nop-label asp-for="Name" />
@@ -59,18 +92,122 @@
                 <span asp-validation-for="Name"></span>
             </div>
         </div>
-    </div>
-
+    </div>@*))*@
     <div class="form-group">
         <div class="col-md-3">
-            <nop-label asp-for="WidgetZoneId" />
+            <nop-label asp-for="CatalogPageId" />
         </div>
         <div class="col-md-9">
-            <nop-select asp-for="WidgetZoneId" asp-items="@Model.AvailableWidgetZones" />
-            <span asp-validation-for="WidgetZoneId"></span>
+            <nop-select asp-for="CatalogPageId" asp-items="@Model.AvailableCatalogPages" />
+            <span asp-validation-for="CatalogPageId"></span>
         </div>
     </div>
-   
+    @*<div class="form-group">
+            <div class="col-md-3">
+                <nop-label asp-for="WidgetZoneId" />
+            </div>
+            <div class="col-md-9">
+                <nop-select asp-for="WidgetZoneId" asp-items="@Model.AvailableWidgetZones" />
+                <span asp-validation-for="WidgetZoneId"></span>
+            </div>
+        </div>*@
+    <div id="productWidgetId" class="form-group">
+        <div class="col-md-3">
+            <nop-label asp-for="ProductWidgetZoneId" />
+        </div>
+        <div class="col-md-9">
+            <nop-select asp-for="ProductWidgetZoneId" asp-items="@Model.AvailableProductWidgetZones" />
+            <span asp-validation-for="ProductWidgetZoneId"></span>
+        </div>
+    </div>
+    <div id="categoryWidgetId" class="form-group">
+        <div class="col-md-3">
+            <nop-label asp-for="CategoryWidgetZoneId" />
+        </div>
+        <div class="col-md-9">
+            <nop-select asp-for="CategoryWidgetZoneId" asp-items="@Model.AvailableCategoryWidgetZones" />
+            <span asp-validation-for="CategoryWidgetZoneId"></span>
+        </div>
+    </div>
+    <div id="manufactureWidgetId" class="form-group">
+        <div class="col-md-3">
+            <nop-label asp-for="ManufactureWidgetZoneId" />
+        </div>
+        <div class="col-md-9">
+            <nop-select asp-for="ManufactureWidgetZoneId" asp-items="@Model.AvailableManufactureWidgetZones" />
+            <span asp-validation-for="ManufactureWidgetZoneId"></span>
+        </div>
+    </div>
+    @*<div class="form-group" id="pnlBackGroundPicture">
+            <div class="col-md-3">
+                <nop-label asp-for="BackGroundPictureId" />
+            </div>
+            <div class="col-md-9">
+                <nop-editor asp-for="BackGroundPictureId" />
+                <span asp-validation-for="BackGroundPictureId"></span>
+            </div>
+        </div>*@
+    @*<div class="form-group">
+            <div class="col-md-4">
+                <nop-label asp-for="SearchWidgetZones" />
+            </div>
+            <div class="col-md-8">
+                <nop-select asp-for="SearchWidgetZones" asp-items="Model.AvailableWidgetZones" asp-multiple="true" />
+            </div>
+        </div>*@
+    <div class="form-group">
+        <div class="col-md-5">
+            @*<nop-override-store-checkbox asp-for="EnableSlider_OverrideForStore" asp-input="EnableSlider" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />*@
+            <nop-label asp-for="OverrideGlobalSettings" />
+        </div>
+        <div class="col-md-7">
+            <nop-editor asp-for="OverrideGlobalSettings" />
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-md-3">
+            <nop-label asp-for="SelectedCustomerRoleIds" />
+        </div>
+        <div class="col-md-9">
+            <nop-select asp-for="SelectedCustomerRoleIds" asp-items="@Model.AvailableCustomerRoles" asp-multiple="true" />
+            <span asp-validation-for="SelectedCustomerRoleIds"></span>
+        </div>
+    </div>
+
+    @*<div class="form-group">
+            <div class="col-md-3">
+                <nop-label asp-for="CustomerRoleIds" />
+            </div>
+            <div class="col-md-9">
+                <div class="row">
+                    <div class="col-md-6">
+                        <nop-select asp-for="CustomerRoleIds" asp-items="Model.AvailableCustomerRoles" asp-multiple="true" />
+                        <script>
+                            $(document).ready(function() {
+                                var customerRoleIdsInput = $('#@Html.IdFor(model => model.CustomerRoleIds)').data("kendoMultiSelect");
+                                customerRoleIdsInput.setOptions({
+                                    autoClose: false,
+                                    filter: "contains"
+                                });
+
+                                @if (Model.AvailableCustomerRoles.Count == 0)
+                                {
+                                    <text>
+                                customerRoleIdsInput.setOptions({
+                                            enable: false,
+                                            placeholder: 'No stores available'
+                                        });
+                                customerRoleIdsInput._placeholder();
+                                customerRoleIdsInput._enable();
+                                    </text>
+                                }
+                            });
+                        </script>
+                    </div>
+
+                </div>
+            </div>
+        </div>*@
     <div class="form-group">
         <div class="col-md-3">
             <nop-label asp-for="SelectedStoreIds" />

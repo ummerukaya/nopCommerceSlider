@@ -19,19 +19,31 @@ namespace Nop.Plugin.Widgets.MySlider.Areas.Admin.Infrastructure
         {
             CreateMap<MySliderSettings, ConfigurationModel>()
                    .ForMember(model => model.EnableSlider_OverrideForStore, options => options.Ignore())
+                   .ForMember(model => model.SelectedCustomerRoleIds_OverrideForStore, options => options.Ignore())
                    .ForMember(model => model.CustomProperties, options => options.Ignore())
+                   .ForMember(model => model.AvailableCustomerRoles, options => options.Ignore())
+                   .ForMember(model => model.SelectedCustomerRoleIds, options => options.Ignore())
                    .ForMember(model => model.ActiveStoreScopeConfiguration, options => options.Ignore());
-            CreateMap<ConfigurationModel, MySliderSettings>();
+            CreateMap<ConfigurationModel, MySliderSettings>()
+                    .ForMember(entity =>entity.SelectedCustomerRoleIds, options => options.Ignore());
 
             CreateMap<MySliders, MySliderModel>()
                     .ForMember(model => model.AvailableStores, options => options.Ignore())
                     .ForMember(model => model.AvailableWidgetZones, options => options.Ignore())
+                    .ForMember(model => model.AvailableProductWidgetZones, options => options.Ignore())
+                    .ForMember(model => model.AvailableCategoryWidgetZones, options => options.Ignore())
+                    .ForMember(model => model.AvailableManufactureWidgetZones, options => options.Ignore())
+                    .ForMember(model => model.AvailableCustomerRoles, options => options.Ignore())
                     .ForMember(model => model.WidgetZoneStr, options => options.Ignore())
                     .ForMember(model => model.CreatedOn, options => options.Ignore())
                     .ForMember(model => model.UpdatedOn, options => options.Ignore())
                     .ForMember(model => model.SliderItemSearchModel, options => options.Ignore())
                     .ForMember(model => model.CustomProperties, options => options.Ignore())
-                    .ForMember(model => model.SelectedStoreIds, options => options.Ignore());
+                    .ForMember(model => model.SelectedStoreIds, options => options.Ignore())
+                    .ForMember(model => model.SelectedCustomerRoleIds, options => options.Ignore())
+                    .ForMember(model => model.ProductWidgetZoneId, options => options.Ignore())
+                    .ForMember(model => model.CategoryWidgetZoneId, options => options.Ignore())
+                    .ForMember(model => model.ManufactureWidgetZoneId, options => options.Ignore());
             CreateMap<MySliderModel, MySliders>()
                     .ForMember(entity => entity.CreatedOnUtc, options => options.Ignore())
                     .ForMember(entity => entity.UpdatedOnUtc, options => options.Ignore());

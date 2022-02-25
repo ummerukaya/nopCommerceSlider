@@ -1,0 +1,5 @@
+﻿@model IEnumerable<Nop.Plugin.Widgets.MySlider.Models.SliderModel>
+@foreach (var sliderModel in Model)
+{
+    @await Html.PartialAsync("_SliderBox.cshtml", sliderModel)
+}

@@ -49,7 +49,7 @@ namespace Nop.Plugin.Widgets.MySlider.Areas.Admin.Models
         [NopResourceDisplayName("Nop.MySliderItems.Fields.DisplayOrder")]
         public int DisplayOrder { get; set; }
 
-        public int SliderId { get; set; }
+        public int MySlidersId { get; set; }
 
         [NopResourceDisplayName("Nop.MySliderItems.Fields.ShopNowLink")]
         public string ShopNowLink { get; set; }

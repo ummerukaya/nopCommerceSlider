@@ -15,19 +15,46 @@ namespace Nop.Plugin.Widgets.MySlider.Areas.Admin.Models
         public MySliderModel()
         {
             AvailableWidgetZones = new List<SelectListItem>();
+            AvailableCustomerRoles = new List<SelectListItem>();
+            AvailableProductWidgetZones = new List<SelectListItem>();
+            AvailableCategoryWidgetZones = new List<SelectListItem>();
+            AvailableManufactureWidgetZones = new List<SelectListItem>();
+            AvailableCatalogPages = new List<SelectListItem>();
             AvailableAnimationTypes = new List<SelectListItem>();
             SliderItemSearchModel = new MySliderItemSearchModel();
             SelectedStoreIds = new List<int>();
+            SelectedCustomerRoleIds = new List<int>() { 0 };
+
         }
 
         [NopResourceDisplayName("Nop.MySlider.Fields.Name")]
         public string Name { get; set; }
 
         [NopResourceDisplayName("Nop.MySlider.Fields.WidgetZone")]
-        public int WidgetZoneId { get; set; }
+        public int CategoryWidgetZoneId { get; set; }
+
+        [NopResourceDisplayName("Nop.MySlider.Fields.WidgetZone")]
+        public int ProductWidgetZoneId { get; set; }
+
+        [NopResourceDisplayName("Nop.MySlider.Fields.WidgetZone")]
+        public int ManufactureWidgetZoneId { get; set; }
+
+        [NopResourceDisplayName("Nop.MySlider.Fields.OverrideGlobalSettings")]
+        public bool OverrideGlobalSettings { get; set; }
 
         [NopResourceDisplayName("Nop.MySlider.Fields.WidgetZone")]
         public string WidgetZoneStr { get; set; }
+
+        public IList<string> CustomerRoleStr { get; set; }
+
+        [NopResourceDisplayName("Nop.MySlider.Fields.CatalogPage")]
+        public int CatalogPageId { get; set; }
+
+        [NopResourceDisplayName("Nop.MySlider.Fields.CustomerRole")]
+        public IList<int> SelectedCustomerRoleIds { get; set; }
+
+        [NopResourceDisplayName("Nop.MySlider.Fields.CatalogPage")]
+        public string CatalogPageStr { get; set; }
 
         [UIHint("Picture")]
         [NopResourceDisplayName("Nop.MySlider.Fields.BackGroundPicture")]
@@ -80,9 +107,17 @@ namespace Nop.Plugin.Widgets.MySlider.Areas.Admin.Models
 
         [NopResourceDisplayName("Nop.MySlider.Fields.SelectedStoreIds")]
         public IList<int> SelectedStoreIds { get; set; }
-        public IList<SelectListItem> AvailableStores { get; set; }
 
+        //[NopResourceDisplayName("Nop.MySlider.Fields.SelectedCustomerRoleIds")]
+        //public IList<int> SelectedCustomerRoleIds { get; set; }
+
+        public IList<SelectListItem> AvailableStores { get; set; }
+        public IList<SelectListItem> AvailableCustomerRoles { get; set; }
         public IList<SelectListItem> AvailableWidgetZones { get; set; }
+        public IList<SelectListItem> AvailableProductWidgetZones { get; set; }
+        public IList<SelectListItem> AvailableCategoryWidgetZones { get; set; }
+        public IList<SelectListItem> AvailableManufactureWidgetZones { get; set; }
+        public IList<SelectListItem> AvailableCatalogPages { get; set; }
 
         public MySliderItemSearchModel SliderItemSearchModel { get; set; }
 

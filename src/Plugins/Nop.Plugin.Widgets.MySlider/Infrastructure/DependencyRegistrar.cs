@@ -19,6 +19,7 @@ namespace Nop.Plugin.Widgets.MySlider.Infrastructure
         public void Register(IServiceCollection services, ITypeFinder typeFinder, AppSettings appSettings)
         {
             services.AddScoped<IMySliderService, MySliderService>();
+            services.AddScoped<IMySliderCustomerService, MySliderCustomerService>();
             services.AddScoped<IMySliderModelFactory, MySliderModelFactory>();
         }
     }

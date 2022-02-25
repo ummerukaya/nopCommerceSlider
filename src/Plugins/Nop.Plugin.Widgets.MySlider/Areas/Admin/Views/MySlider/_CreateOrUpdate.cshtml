@@ -1,4 +1,4 @@
-﻿@model MySliderModel
+﻿@model Nop.Plugin.Widgets.MySlider.Areas.Admin.Models.MySliderModel
 
 @{
     const string hideInfoBlockAttributeName = "SliderPage.HideInfoBlock";
@@ -16,10 +16,10 @@
 
 <div class="content">
     <div class="form-horizontal">
-        <nop-panels id="slider-panels">
-            <nop-panel asp-name="slider-info" asp-icon="fa fa-info" asp-title="@T("Nop.MySlider.Tab.Info")" asp-hide-block-attribute-name="@hideInfoBlockAttributeName" asp-hide="@hideInfoBlock" asp-advanced="false">@await Html.PartialAsync("_CreateOrUpdate.Info", Model)</nop-panel>
-            <nop-panel asp-name="slider-properties" asp-icon="fa fa-bars" asp-title="@T("Nop.MySlider.Tab.Properties")" asp-hide-block-attribute-name="@hidePropertiesBlockAttributeName" asp-hide="@hidePropertiesBlock" asp-advanced="false">@await Html.PartialAsync("_CreateOrUpdate.Properties", Model)</nop-panel>
-            <nop-panel asp-name="slider-items" asp-icon="fa fa-th-list" asp-title="@T("Nop.MySlider.Tab.SliderItems")" asp-hide-block-attribute-name="@hideItemsBlockAttributeName" asp-hide="@hideItemsBlock" asp-advanced="false">@await Html.PartialAsync("_CreateOrUpdate.MySliderItems", Model)</nop-panel>
-        </nop-panels>
+        <nop-cards id="slider-panels">
+            <nop-card asp-name="slider-info" asp-icon="fa fa-info" asp-title="@T("Nop.MySlider.Tab.Info")" asp-hide-block-attribute-name="@hideInfoBlockAttributeName" asp-hide="@hideInfoBlock" asp-advanced="false">@await Html.PartialAsync("_CreateOrUpdate.Info", Model)</nop-card>
+            <nop-card asp-name="slider-properties" asp-icon="fa fa-bars" asp-title="@T("Nop.MySlider.Tab.Properties")" asp-hide-block-attribute-name="@hidePropertiesBlockAttributeName" asp-hide="@hidePropertiesBlock" asp-advanced="false">@await Html.PartialAsync("_CreateOrUpdate.Properties", Model)</nop-card>
+            <nop-card asp-name="slider-items" asp-icon="fa fa-th-list" asp-title="@T("Nop.MySlider.Tab.SliderItems")" asp-hide-block-attribute-name="@hideItemsBlockAttributeName" asp-hide="@hideItemsBlock" asp-advanced="false">@await Html.PartialAsync("_CreateOrUpdate.SliderItems", Model)</nop-card>
+        </nop-cards>
     </div>
 </div>

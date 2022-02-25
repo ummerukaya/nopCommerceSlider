@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Nop.Core;
+using Nop.Core.Domain.Customers;
 using Nop.Plugin.MySlider.Domains;
 
 namespace Nop.Plugin.Widgets.MySlider.Services
@@ -11,7 +12,8 @@ namespace Nop.Plugin.Widgets.MySlider.Services
     public interface IMySliderService
     {
 
-        Task<IPagedList<MySliders>> GetAllSlidersAsync(List<int> widgetZoneIds = null, int storeId = 0,
+        Task<IPagedList<MySliders>> GetAllSlidersAsync(List<int> widgetZoneIds = null, List<int> catalogPageIds=null,
+            List<int> customerRoleIds = null, int storeId = 0,
             bool? active = null, int pageIndex = 0, int pageSize = int.MaxValue);
 
         Task<MySliders> GetSliderByIdAsync(int sliderId);
@@ -32,6 +34,6 @@ namespace Nop.Plugin.Widgets.MySlider.Services
         Task UpdateSliderItemAsync(MySliderItem sliderItem);
 
         Task DeleteSliderItemAsync(MySliderItem sliderItem);
-
+        //Task<MySliders> GetSliderByCurrentCustomerRoleIdAsync(Customer currentCustomer, List<int> customerRoleIds);
     }
 }

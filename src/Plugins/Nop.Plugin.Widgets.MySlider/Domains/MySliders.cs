@@ -2,7 +2,10 @@
 using System;
 using System.Collections.Generic;
 using Nop.Core;
+using Nop.Core.Domain.Customers;
+using Nop.Core.Domain.Security;
 using Nop.Core.Domain.Stores;
+using Nop.Plugin.Widgets.MySlider.Domains;
 
 namespace Nop.Plugin.MySlider.Domains
 {
@@ -11,6 +14,8 @@ namespace Nop.Plugin.MySlider.Domains
         public string Name { get; set; }
 
         public int WidgetZoneId { get; set; }
+
+        public int CatalogPageId { get; set; }
 
         public int BackGroundPictureId { get; set; }
 
@@ -23,6 +28,8 @@ namespace Nop.Plugin.MySlider.Domains
         public bool Nav { get; set; }
 
         public bool AutoPlay { get; set; }
+
+        public bool OverrideGlobalSettings { get; set; }
 
         public int AutoPlayTimeout { get; set; }
 
@@ -47,6 +54,6 @@ namespace Nop.Plugin.MySlider.Domains
         public DateTime UpdatedOnUtc { get; set; }
 
         public bool LimitedToStores { get; set; }
-
+       
     }
 }

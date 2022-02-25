@@ -1,0 +1,71 @@
+﻿@model Nop.Plugin.Widgets.MySlider.Areas.Admin.Models.ConfigurationModel
+
+@{
+    ViewBag.Title = T("Nop.MySlider.Configuration").Text;
+    Html.SetActiveMenuItemSystemName("MySlider.Configuration");
+}
+<script>
+    $(document).ready(function() {
+
+        $("#@Html.IdFor(model => model.EnableSlider)").change(toggleEnableSlider);
+        toggleEnableSlider();
+    });
+
+    function toggleEnableSlider() {
+        if ($('#@Html.IdFor(model => model.EnableSlider)').is(':checked')) {
+            $('#pnlCustomerRole').show();
+        } else {
+            $('#pnlCustomerRole').hide();
+        }
+    }
+</script>
+
+<form asp-controller="MySlider" asp-action="Configure" method="post">
+    <div class="content-header clearfix">
+        <h1 class="pull-left">
+            @T("Nop.MySlider.Configuration")
+        </h1>
+        <div class="pull-right">
+            <button type="submit" name="save" class="btn bg-blue">
+                <i class="fa fa-floppy-o"></i>
+                @T("Admin.Common.Save")
+            </button>
+        </div>
+    </div>
+
+    <div class="content">
+        <div class="form-horizontal">
+            @await Component.InvokeAsync("StoreScopeConfiguration")
+            <div asp-validation-summary="All"></div>
+            <div class="card-group">
+                <div class="card card-default">
+                    <div class="card-body">
+                        <div class="form-group">
+                            <div class="col-md-3">
+                                <nop-override-store-checkbox asp-for="EnableSlider_OverrideForStore" asp-input="EnableSlider" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                <nop-label asp-for="EnableSlider" />
+                            </div>
+                            <div class="col-md-9">
+                                <nop-editor asp-for="EnableSlider" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <nop-nested-setting asp-for="EnableSlider">
+            <div id="pnlCustomerRole" class="form-group"> 
+                <div class="col-md-3">
+                    <nop-override-store-checkbox asp-for="SelectedCustomerRoleIds_OverrideForStore" asp-input="SelectedCustomerRoleIds" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                    <nop-label asp-for="SelectedCustomerRoleIds" />
+                </div>
+                    <div class="col-md-9">
+                        <nop-select asp-for="SelectedCustomerRoleIds" asp-items="@Model.AvailableCustomerRoles" asp-multiple="true" />
+                        <span asp-validation-for="SelectedCustomerRoleIds"></span>
+                    </div>
+            </div>
+        </nop-nested-setting>
+    </div>
+</form>
+
+
